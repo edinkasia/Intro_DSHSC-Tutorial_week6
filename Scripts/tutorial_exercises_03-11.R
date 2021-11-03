@@ -13,7 +13,11 @@ tbi_year <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytues
 ### Task 1
 # Save both datasets in the Raw_Data folder (use the 'here' library, as I showed in the demo)
 
-# Insert your code for Task 1 below this line:
+# I have written the code to save tbi_age:
+write_csv(tbi_age, file = here("Raw_Data", "tbi_age.csv"))
+
+# Now, adapt the code from above to save tbi_year 
+# (copy and paste the code from line 17 into the line below, and adapt it)
 
 ### Task 2
 # We'll look at tbi_age first. Use your favourite functions for eyeballing data and write a couple of sentences about 
@@ -26,7 +30,8 @@ tbi_year <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytues
 # Task 3
 # Are there any variables in this dataset that should be treated as factors? 
 # Decide which ones, and turn them into factors. 
-# Once you've done that, think about the order of factor levels. Does it need to be changed? If so, change it.
+# Once you've done that, think about the order of factor levels. 
+# Does it need to be changed? If so, change it.
 
 # Insert your code below this line:
 

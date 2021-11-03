@@ -14,6 +14,8 @@ tbi_year <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytues
 # Save both datasets in the Raw_Data folder (use the 'here' library, as I showed in the demo)
 
 # Insert your code for Task 1 below this line:
+# Use a write_csv function, with the here() syntax
+# Remember, the folder name goes first, followed by file name
 write_csv(tbi_age, file = here("Raw_Data", "tbi_age.csv"))
 write_csv(tbi_year, file = here("Raw_Data", "tbi_year.csv"))
 
@@ -39,15 +41,24 @@ str(tbi_age)
 # Once you've done that, think about the order of factor levels. Does it need to be changed? If so, change it.
 
 # Insert your code below this line:
+
+# Solution: type, injury_mechanism and age_group are all categorical variables,
+# and so should be stored as factors. We can use the mutate() function to
+# change those variables, and the factor() function to turn them into factors. 
+# No additional arguments are needed.
 tbi_age <- tbi_age %>% 
   mutate(type = factor(type),
          injury_mechanism = factor(injury_mechanism),
-         age_group = factor(age_group, levels = c("0-17", "0-4", "5-14", "15-24",
-                                                  "25-34", "35-44", "45-54", "55-64",
-                                                  "65-74", "75+", "Total")))
+         age_group = factor(age_group))
 
 # When we used the default settings, the factor levels of age were a little
-# mixed up. We're able to sort them using the levels argument. 
+# mixed up. We're able to sort them using the levels argument.
+# Notice how we've got overlapping age_group levels for children - 
+# this would cause trouble if we just added different age groups up.
+tbi_age <- tbi_age %>% 
+  mutate(age_group = factor(age_group, levels = c("0-17", "0-4", "5-14", "15-24",
+                                                  "25-34", "35-44", "45-54", "55-64",
+                                                  "65-74", "75+", "Total")))
 
 # Task 4
 # Imagine that you are preparing a brief for the local health authority, and they have asked you to 
@@ -58,6 +69,19 @@ tbi_age <- tbi_age %>%
 # Which injury mechanism caused the most deaths in total?
 
 # Insert your code below this line:
+
+# First, think about subsetting the data - which variables do you need?
+# You don't want to look at any particular age group, so you can
+# set age_group to be Total. You are interested in deaths,
+# so you can set type to be Deaths. Use the filter function,
+# with both of these criteria applied:
+tbi_age %>% 
+  filter(age_group == "Total" & type == "Deaths")
+
+# Using the line above, you already get a pretty small tibble,
+# from which you can read out the highest number.
+# If you wanted to make your life even easier, you can arrange
+# this tibble, with the highest number first:
 tbi_age %>% 
   filter(age_group == "Total" & type == "Deaths") %>% 
   arrange(desc(number_est)) 
@@ -71,11 +95,20 @@ tbi_age %>%
 # Tables folder. 
 
 # Insert your code below this line:
+# As before, start by thinking about filtering - you want all types of outcome,
+# but you're interested in the Total across age groups. So, you can set 
+# age_group to "Total". You will want to save the tibble, so assign it into a new object.
+table_age <- tbi_age %>% 
+  filter(age_group == "Total")
+
+# If you wanted to, you could add the `arrange` function (like above), 
+# just to ease interpretation.
 table_age <- tbi_age %>% 
   filter(age_group == "Total") %>% 
   arrange(desc(number_est))
  
-# I have added the `arrange` function here, just to ease interpretation.
+# And then, for writing into a file, we use the write_csv function,
+# with the here helper, to put it into the required folder.
 
 write_csv(table_age, here("Tables", "table_age.csv"))
 
